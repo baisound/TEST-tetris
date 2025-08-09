@@ -1,6 +1,5 @@
 # GUI フレームワーク
 pygame==2.5.2
-tkinter-modern==0.2.1
 PyQt6==6.6.1
 customtkinter==5.2.2
 
