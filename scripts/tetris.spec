@@ -7,7 +7,10 @@ a = Analysis(
     pathex=['../src'],
     binaries=[],
     datas=[],
-    hiddenimports=['pygame', 'pygame._sdl2', 'pygame.font', 'pygame.mixer', 'tetris_game.game_engine'],
+    hiddenimports=[
+        'pygame', 'pygame._sdl2', 'pygame.font', 'pygame.mixer',
+        'tetris_game.game_engine', 'tetris_game'
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -16,6 +19,8 @@ a = Analysis(
     win_private_assemblies=False,
     cipher=block_cipher,
     noarchive=False,
+    collect_submodules=['tetris_game'],
+    collect_data=['tetris_game'],
 )
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)

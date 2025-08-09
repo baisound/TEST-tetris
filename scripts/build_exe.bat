@@ -74,7 +74,7 @@ if not exist "tetris.spec" (
 
 :: PyInstallerでEXE化
 echo [INFO] PyInstallerでビルド中...
-pyinstaller --collect-all tetris_game tetris.spec
+pyinstaller tetris.spec
 if errorlevel 1 (
     echo [ERROR] ビルドに失敗しました。
     pause

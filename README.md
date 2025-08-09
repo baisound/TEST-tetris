@@ -331,11 +331,12 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 # 1. tetris.specのhiddenimportsを確認
 hiddenimports=['pygame', 'pygame._sdl2', 'tetris_game.game_engine'],
 
-# 2. --collect-allオプション使用
-pyinstaller --collect-all tetris_game tetris.spec
+# 2. .specファイル内でcollect設定（推奨）
+collect_submodules=['tetris_game'],
+collect_data=['tetris_game'],
 
-# 3. パッケージ全体収集
-pyinstaller --collect-submodules tetris_game tetris.spec
+# 3. 手動で全モジュール収集（.specファイルなしの場合）
+pyinstaller --collect-all tetris_game --onefile src/tetris_game/main.py
 ```
 
 #### pygame初期化エラー
