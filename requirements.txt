@@ -1,0 +1,22 @@
+# GUI フレームワーク
+pygame==2.5.2
+tkinter-modern==0.2.1
+PyQt6==6.6.1
+customtkinter==5.2.2
+
+# デスクトップアプリ開発
+pyinstaller==6.3.0
+cx-Freeze==6.15.16
+auto-py-to-exe==2.43.1
+
+# ユーティリティ
+Pillow==10.2.0
+requests==2.31.0
+
+# データ処理
+numpy==1.26.3
+pandas==2.2.0
+
+# 設定管理
+pydantic==2.5.3
+python-dotenv==1.0.0
