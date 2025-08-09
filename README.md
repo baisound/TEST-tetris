@@ -172,21 +172,25 @@ source tetris_venv/bin/activate
 **Windows:**
 ```batch
 cd scripts
-build_exe.bat
+.\build_exe.bat
 ```
 
 ### 手動ビルド
 
 ```bash
-# 仮想環境をアクティベート
+# Linux/Mac
 source tetris_venv/bin/activate
-
-# scriptsディレクトリに移動してビルド
 cd scripts
 pyinstaller tetris.spec
-
-# 実行ファイル確認
 ls -la dist/
+```
+
+```batch
+# Windows
+cd scripts
+call ..\tetris_venv\Scripts\activate.bat
+pyinstaller tetris.spec
+dir dist\
 ```
 
 ### ビルドエラーの対処法
@@ -298,10 +302,25 @@ chcp 65001
 ```batch
 # scriptsディレクトリから実行すること
 cd scripts
-build_exe.bat
+.\build_exe.bat
 
 # 現在のディレクトリ確認
 echo %CD%
+
+# PowerShellの場合
+Get-Location
+```
+
+### 問題7: Windows実行権限
+```batch
+# コマンドプロンプトの場合
+cd scripts
+.\build_exe.bat
+
+# PowerShellの場合（実行ポリシー確認）
+Get-ExecutionPolicy
+# 必要に応じて一時的に変更
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ## 注意事項

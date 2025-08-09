@@ -14,7 +14,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-[OK] Pythonが見つかりました
+echo [OK] Pythonが見つかりました
 python --version
 
 :: pip確認
@@ -65,6 +65,9 @@ if not exist "tetris.spec" (
     echo [ERROR] tetris.spec ファイルが見つかりません。
     echo         scripts ディレクトリから実行していることを確認してください。
     echo         現在のディレクトリ: %CD%
+    echo.
+    echo [INFO] 利用可能なファイル:
+    dir /b
     pause
     exit /b 1
 )
