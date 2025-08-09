@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 """テトリスゲーム メインアプリケーション"""
 
 import pygame
 import sys
+import os
 from tetris_game.game_engine import GameEngine
 
 # 初期化
@@ -34,8 +36,112 @@ class TetrisGame:
         pygame.display.set_caption("テトリス")
         self.clock = pygame.time.Clock()
         self.tetris = GameEngine(GRID_WIDTH, GRID_HEIGHT)
-        self.font = pygame.font.Font(None, 36)
-        self.small_font = pygame.font.Font(None, 24)
+        
+        # Windows対応日本語フォント設定
+        self.font = self.get_japanese_font(36)
+        self.small_font = self.get_japanese_font(24)
+    
+    def get_japanese_font(self, size):
+        """クロスプラットフォーム日本語フォントを取得"""
+        # 1. バンドルされたフォントファイルを確認
+        try:
+            # PyInstallerでバンドルされたリソースパス
+            if hasattr(sys, '_MEIPASS'):
+                bundle_dir = sys._MEIPASS
+            else:
+                bundle_dir = os.path.dirname(os.path.abspath(__file__))
+            
+            # プロジェクトのassetsディレクトリも確認
+            asset_paths = [
+                os.path.join(bundle_dir, 'assets', 'fonts'),
+                os.path.join(os.path.dirname(bundle_dir), 'assets', 'fonts'),
+                os.path.join(os.path.dirname(os.path.dirname(bundle_dir)), 'assets', 'fonts'),
+            ]
+            
+            for assets_dir in asset_paths:
+                if os.path.exists(assets_dir):
+                    for font_file in os.listdir(assets_dir):
+                        if font_file.endswith(('.ttf', '.ttc', '.otf')):
+                            try:
+                                font_path = os.path.join(assets_dir, font_file)
+                                font = pygame.font.Font(font_path, size)
+                                # 日本語テスト
+                                test_surface = font.render("テスト", True, (255, 255, 255))
+                                if test_surface.get_width() > 0:
+                                    return font
+                            except:
+                                continue
+        except:
+            pass
+        
+        # 2. システム固有フォント検索
+        system_font_paths = []
+        
+        # Windows
+        if os.name == 'nt':
+            windows_fonts = os.path.join(os.environ.get('WINDIR', 'C:/Windows'), 'Fonts')
+            font_candidates = [
+                "meiryo.ttc",        # メイリオ
+                "meiryob.ttc",       # メイリオ Bold  
+                "msgothic.ttc",      # MSゴシック
+                "NotoSansCJK-Regular.ttc",  # Noto Sans CJK
+            ]
+            system_font_paths = [(windows_fonts, f) for f in font_candidates]
+        
+        # macOS
+        elif sys.platform == 'darwin':
+            mac_fonts = '/System/Library/Fonts'
+            font_candidates = [
+                "ヒラギノ角ゴシック W3.ttc",
+                "AppleGothic.ttf",
+                "NotoSansCJK.ttc",
+            ]
+            system_font_paths = [(mac_fonts, f) for f in font_candidates]
+        
+        # Linux
+        else:
+            linux_font_dirs = ['/usr/share/fonts', '/usr/local/share/fonts']
+            for font_dir in linux_font_dirs:
+                if os.path.exists(font_dir):
+                    for root, dirs, files in os.walk(font_dir):
+                        for file in files:
+                            if any(keyword in file.lower() for keyword in ['noto', 'deja', 'liberation']):
+                                system_font_paths.append((root, file))
+        
+        # システムフォント試行
+        for font_dir, font_name in system_font_paths:
+            try:
+                font_path = os.path.join(font_dir, font_name)
+                if os.path.exists(font_path):
+                    font = pygame.font.Font(font_path, size)
+                    # 日本語テスト
+                    test_surface = font.render("テスト", True, (255, 255, 255))
+                    if test_surface.get_width() > 0:
+                        return font
+            except:
+                continue
+        
+        # 3. pygame.font.SysFont検索
+        try:
+            system_fonts = pygame.font.get_fonts()
+            # 日本語対応可能性の高いフォント
+            japanese_fonts = [f for f in system_fonts if any(keyword in f.lower() for keyword in 
+                            ['meiryo', 'gothic', 'mincho', 'noto', 'deja', 'liberation', 'arial'])]
+            
+            for font_name in japanese_fonts[:3]:  # 上位3つまでテスト
+                try:
+                    font = pygame.font.SysFont(font_name, size)
+                    test_surface = font.render("テスト", True, (255, 255, 255))
+                    if test_surface.get_width() > 0:
+                        return font
+                except:
+                    continue
+        except:
+            pass
+        
+        # 4. 最後の手段: デフォルトフォント
+        print(f"Warning: 日本語フォントが見つかりません。デフォルトフォントを使用します。")
+        return pygame.font.Font(None, size)
     
     def draw_grid(self):
         for x in range(GRID_WIDTH + 1):

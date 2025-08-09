@@ -409,6 +409,23 @@ setx SDL_AUDIODRIVER dummy
 # https://aka.ms/vs/17/release/vc_redist.x64.exe
 ```
 
+#### 日本語文字化け
+```batch
+# Windowsでの日本語表示問題
+# 1. システムフォント確認
+dir "%WINDIR%\Fonts" | find "meiryo"
+dir "%WINDIR%\Fonts" | find "msgothic"
+
+# 2. フォントが見つからない場合の対処
+# メイリオやMSゴシックがない場合は以下をインストール:
+# - Windows Updates確認
+# - 言語パック追加インストール
+
+# 3. 代替フォント使用
+# assets/fonts/ に日本語対応TTFファイルを配置
+# 例: NotoSansCJK-Regular.ttf
+```
+
 ## 注意事項
 
 - **推奨**: 必ず仮想環境を使用してください
