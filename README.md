@@ -171,8 +171,13 @@ source tetris_venv/bin/activate
 
 **Windows:**
 ```batch
+# 通常ビルド
 cd scripts
 .\build_exe.bat
+
+# デバッグビルド（詳細ログ付き）
+cd scripts
+.\build_exe_debug.bat
 ```
 
 ### 手動ビルド
@@ -323,7 +328,50 @@ Get-ExecutionPolicy
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-### 問題8: EXE実行時のエラー
+### 問題8: ビルドが通らない場合のデバッグ
+
+#### デバッグビルド実行
+```batch
+# 詳細ログ付きビルド
+cd scripts
+.\build_exe_debug.bat
+
+# ログファイル確認
+# build_debug_YYYYMMDD_HHMMSS.log が生成される
+```
+
+#### よくあるビルドエラーと原因
+```
+1. "']' は認識されていません" 
+   → バッチファイルの文字エンコーディング問題
+   → 解決: chcp 65001 でUTF-8設定
+
+2. "option(s) not allowed: --collect-all"
+   → 既存.specファイルと--collect-allの併用不可
+   → 解決: .spec内でcollect_submodulesを設定
+
+3. "Spec file not found"
+   → 実行ディレクトリが間違っている
+   → 解決: cd scripts で正しいディレクトリに移動
+
+4. "No module named 'game_engine'"
+   → hiddenimportsまたはpathex設定問題
+   → 解決: tetris_simple.spec で基本設定テスト
+```
+
+#### 段階的デバッグ手順
+```batch
+# 1. シンプル版でテスト
+pyinstaller tetris_simple.spec
+
+# 2. コンソール版で実行エラー確認  
+pyinstaller --console --onefile ../src/tetris_game/main.py
+
+# 3. 詳細ログでビルドエラー特定
+pyinstaller --log-level=DEBUG tetris.spec
+```
+
+### 問題9: EXE実行時のエラー
 
 #### ModuleNotFoundError（モジュール未発見）
 ```batch
