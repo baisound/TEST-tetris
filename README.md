@@ -323,6 +323,43 @@ Get-ExecutionPolicy
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
+### 問題8: EXE実行時のエラー
+
+#### ModuleNotFoundError（モジュール未発見）
+```batch
+# game_engineモジュールが見つからない場合
+# 1. tetris.specのhiddenimportsを確認
+hiddenimports=['pygame', 'pygame._sdl2', 'tetris_game.game_engine'],
+
+# 2. --collect-allオプション使用
+pyinstaller --collect-all tetris_game tetris.spec
+
+# 3. パッケージ全体収集
+pyinstaller --collect-submodules tetris_game tetris.spec
+```
+
+#### pygame初期化エラー
+```batch
+# 音声デバイスがない環境
+set SDL_AUDIODRIVER=dummy
+scripts\dist\tetris.exe
+
+# または環境変数を永続設定
+setx SDL_AUDIODRIVER dummy
+```
+
+#### pathspec関連エラー
+```batch
+# 相対パスの問題の場合
+# tetris.spec内のパスを絶対パスに修正
+```
+
+#### DLL読み込みエラー
+```batch
+# Visual C++ Redistributableが必要
+# https://aka.ms/vs/17/release/vc_redist.x64.exe
+```
+
 ## 注意事項
 
 - **推奨**: 必ず仮想環境を使用してください

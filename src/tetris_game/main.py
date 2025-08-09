@@ -2,7 +2,7 @@
 
 import pygame
 import sys
-from game_engine import GameEngine
+from tetris_game.game_engine import GameEngine
 
 # 初期化
 pygame.init()

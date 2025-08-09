@@ -72,7 +72,7 @@ echo "✅ 依存関係のインストール完了"
 
 # PyInstallerでビルド
 echo "🔨 PyInstallerでビルド中..."
-if ! pyinstaller tetris.spec; then
+if ! pyinstaller --collect-all tetris_game tetris.spec; then
     echo "❌ ビルドに失敗しました。"
     exit 1
 fi
