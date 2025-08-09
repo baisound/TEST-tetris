@@ -171,7 +171,8 @@ source tetris_venv/bin/activate
 
 **Windows:**
 ```batch
-scripts\build_exe.bat
+cd scripts
+build_exe.bat
 ```
 
 ### 手動ビルド
@@ -278,10 +279,29 @@ python src/tetris_game/main.py
 # GUIが必要なアプリケーションです
 ```
 
-### 問題4: Permission denied
+### 問題4: Permission denied（Linux/Mac）
 ```bash
 chmod +x scripts/build_exe.sh
 chmod +x scripts/dist/tetris
+```
+
+### 問題5: Windows文字化け
+```batch
+# コマンドプロンプトの文字エンコーディング設定
+chcp 65001
+
+# または PowerShellを使用
+# [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+```
+
+### 問題6: tetris.spec not found（Windows）
+```batch
+# scriptsディレクトリから実行すること
+cd scripts
+build_exe.bat
+
+# 現在のディレクトリ確認
+echo %CD%
 ```
 
 ## 注意事項
