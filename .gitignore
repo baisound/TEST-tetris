@@ -32,6 +32,9 @@ MANIFEST
 *.manifest
 *.spec
 
+# プロジェクト固有specファイルは含める
+!scripts/tetris.spec
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
